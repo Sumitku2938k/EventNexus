@@ -1,0 +1,51 @@
+<% layout("layouts/boilerplate.ejs") -%>
+
+<div class="hero-section">
+  <h1 class="hero-title">
+    <i class="fas fa-calendar-check"></i>
+    College Event Manager
+  </h1>
+  <p class="hero-subtitle">
+    Organize, manage, and participate in exciting college events
+  </p>
+  <div class="d-flex gap-3 justify-content-center flex-wrap">
+    <a href="/events" class="btn btn-primary btn-lg">
+      <i class="fas fa-list me-2"></i>Browse Events
+    </a>
+    <a href="/events/new" class="btn btn-success btn-lg">
+      <i class="fas fa-plus me-2"></i>Create Event
+    </a>
+  </div>
+</div>
+
+<div class="row g-4 mt-4">
+  <div class="col-md-4">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <i class="fas fa-laptop-code fa-3x mb-3" style="color: #667eea;"></i>
+        <h5 class="card-title">Technical Events</h5>
+        <p class="card-text">Hackathons, workshops, and coding competitions</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <i class="fas fa-theater-masks fa-3x mb-3" style="color: #f5576c;"></i>
+        <h5 class="card-title">Cultural Events</h5>
+        <p class="card-text">Music, dance, drama, and art festivals</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <i class="fas fa-trophy fa-3x mb-3" style="color: #00f2fe;"></i>
+        <h5 class="card-title">Sports Events</h5>
+        <p class="card-text">Tournaments, matches, and athletic competitions</p>
+      </div>
+    </div>
+  </div>
+</div>
