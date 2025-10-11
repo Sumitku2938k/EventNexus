@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # 🎓 EventNexus – College Event Management System
 
 EventNexus is a full-stack web application designed to simplify college event management.  
@@ -146,4 +144,4 @@ B.Tech CSE Student – College Event Management Project
 ## 📜 License
 
 This project is open-source and available under the MIT License.
->>>>>>> c95fdcaa9fa6855b2b8be707634026d116613202
+
