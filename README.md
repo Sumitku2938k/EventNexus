@@ -34,7 +34,6 @@ and for **admins** to create, update, and manage event details with ease.
 
 ## 📁 Folder Structure
 
->>>>>>> c95fdcaa9fa6855b2b8be707634026d116613202
 ```
 College Event Manager
 ├─ app.js
