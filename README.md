@@ -57,8 +57,6 @@ College Event Manager
    ├─ home.ejs
    └─ layouts
       └─ boilerplate.ejs
-
-<<<<<<< HEAD
 ```
 =======
 ```
