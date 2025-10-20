@@ -7,12 +7,14 @@
       <p class="text-muted">Fill in the details to create an exciting new event</p>
     </div>
 
-    <form method="POST" action="/events" class="event-form">
+    <form method="POST" action="/events" class="event-form needs-validation" novalidate>
       <div class="mb-3">
         <label for="name" class="form-label">
           <i class="fas fa-tag me-2"></i>Event Name
         </label>
         <input type="text" id="name" name="event[name]" class="form-control" placeholder="e.g., Tech Fest 2025" required>
+        <div class="valid-feedback">Event Name Looks good!</div>
+        <div class="invalid-feedback">Please provide an Event Name.</div>
       </div>
 
       <div class="mb-3">
@@ -20,6 +22,8 @@
           <i class="fas fa-align-left me-2"></i>Description
         </label>
         <textarea id="description" name="event[description]" class="form-control" rows="4" placeholder="Describe your event in detail..." required></textarea>
+        <div class="valid-feedback">Description Looks good!</div>
+        <div class="invalid-feedback">Please provide a Description.</div>   
       </div>
 
       <div class="row">
@@ -28,6 +32,8 @@
             <i class="fas fa-calendar me-2"></i>Date
           </label>
           <input type="date" id="date" name="event[date]" class="form-control" required>
+          <div class="valid-feedback">Date Looks good!</div>
+          <div class="invalid-feedback">Please provide a Date.</div>
         </div>
 
         <div class="col-md-6 mb-3">
@@ -35,6 +41,8 @@
             <i class="fas fa-map-marker-alt me-2"></i>Venue
           </label>
           <input type="text" id="venue" name="event[venue]" class="form-control" placeholder="e.g., Main Auditorium" required>
+          <div class="valid-feedback">Venue Looks good!</div>
+          <div class="invalid-feedback">Please provide a Venue.</div>
         </div>
       </div>
 
@@ -49,6 +57,8 @@
             <option value="Cultural">🎭 Cultural</option>
             <option value="Sports">⚽ Sports</option>
           </select>
+          <div class="valid-feedback">Category Looks good!</div>
+          <div class="invalid-feedback">Please select a Category.</div>
         </div>
 
         <div class="col-md-6 mb-3">
@@ -56,6 +66,8 @@
             <i class="fas fa-rupee-sign me-2"></i>Registration Fee (₹)
           </label>
           <input type="number" id="registrationFee" name="event[registrationFee]" class="form-control" placeholder="0" min="0" required>
+          <div class="valid-feedback">Registration Fee Looks good!</div>
+          <div class="invalid-feedback">Please provide a valid Registration Fee.</div>
         </div>
       </div>
 
