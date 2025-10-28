@@ -85,7 +85,7 @@ node init/index.js
 
 ### 4️⃣ Start the Server
 ```bash
-npm start
+nodemon app.js
 ```
 
 # OR for development
