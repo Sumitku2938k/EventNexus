@@ -14,7 +14,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 sticky-top">
     <div class="container-fluid px-4">
-      <a class="navbar-brand" href="/events">
+      <a class="navbar-brand" href="/">
         <i class="fas fa-calendar-alt me-2"></i>
         College Event Manager
       </a>
@@ -28,11 +28,63 @@
               <i class="fas fa-list me-1"></i> All Events
             </a>
           </li>
-          <li class="nav-item">
-            <a class="btn btn-outline-light ms-2" href="/events/new">
-              <i class="fas fa-plus me-1"></i> New Event
-            </a>
-          </li>
+
+          <% if (currentUser.isLoggedIn) { %>
+            <!-- Student Navigation -->
+            <% if (currentUser.role === 'student') { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/dashboard/student">
+                  <i class="fas fa-user-graduate me-1"></i> My Registrations
+                </a>
+              </li>
+            <% } %>
+
+            <!-- Admin Navigation -->
+            <% if (currentUser.role === 'admin') { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/dashboard/admin">
+                  <i class="fas fa-chart-line me-1"></i> Dashboard
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="btn btn-outline-light ms-2" href="/events/new">
+                  <i class="fas fa-plus me-1"></i> New Event
+                </a>
+              </li>
+            <% } %>
+
+            <!-- User Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-1"></i> <%= currentUser.name %>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <span class="dropdown-item-text">
+                    <small class="text-muted">Logged in as <%= currentUser.role %></small>
+                  </span>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item" href="/auth/logout">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                  </a>
+                </li>
+              </ul>
+            </li>
+          <% } else { %>
+            <!-- Guest Navigation -->
+            <li class="nav-item">
+              <a class="nav-link" href="/auth/login">
+                <i class="fas fa-sign-in-alt me-1"></i> Login
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-outline-light ms-2" href="/auth/signup">
+                <i class="fas fa-user-plus me-1"></i> Sign Up
+              </a>
+            </li>
+          <% } %>
         </ul>
       </div>
     </div>

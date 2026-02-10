@@ -1,0 +1,94 @@
+<% layout("layouts/boilerplate.ejs") -%>
+
+<div class="mb-4">
+  <a href="/dashboard/admin" class="btn btn-secondary mb-3">
+    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+  </a>
+  
+  <div class="event-header">
+    <h2><%= event.name %></h2>
+    <p class="text-muted mb-3"><%= event.description %></p>
+    <div class="d-flex gap-3 flex-wrap">
+      <span class="badge bg-primary">
+        <i class="fas fa-calendar me-1"></i><%= event.date.toDateString() %>
+      </span>
+      <span class="badge bg-success">
+        <i class="fas fa-map-marker-alt me-1"></i><%= event.venue %>
+      </span>
+      <span class="badge bg-info">
+        <i class="fas fa-users me-1"></i><%= registrations.length %> Registered
+      </span>
+    </div>
+  </div>
+</div>
+
+<% if (registrations.length === 0) { %>
+  <div class="empty-state">
+    <i class="fas fa-users-slash"></i>
+    <h3>No Registrations Yet</h3>
+    <p>No students have registered for this event yet.</p>
+  </div>
+<% } else { %>
+  <div class="table-responsive">
+    <h4 class="mb-3">👥 Registered Students</h4>
+    <table class="table table-hover table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Student Name</th>
+          <th>Email</th>
+          <th>Registration Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% registrations.forEach((reg, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td>
+              <i class="fas fa-user-graduate me-2 text-primary"></i>
+              <strong><%= reg.studentId.name %></strong>
+            </td>
+            <td>
+              <i class="fas fa-envelope me-2 text-muted"></i>
+              <%= reg.studentId.email %>
+            </td>
+            <td>
+              <i class="fas fa-clock me-2 text-success"></i>
+              <%= reg.appliedAt.toLocaleString() %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Export/Print Options -->
+  <div class="mt-4 text-end">
+    <button onclick="window.print()" class="btn btn-secondary">
+      <i class="fas fa-print me-2"></i>Print List
+    </button>
+  </div>
+<% } %>
+
+<style>
+.event-header {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+@media print {
+  .btn, nav, .navbar {
+    display: none !important;
+  }
+}
+</style>

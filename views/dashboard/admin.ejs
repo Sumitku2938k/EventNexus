@@ -1,0 +1,216 @@
+<% layout("layouts/boilerplate.ejs") -%>
+
+<div class="text-center mb-5">
+  <h2>👨‍💼 Admin Dashboard</h2>
+  <p class="text-muted">Manage events and track registrations</p>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row g-4 mb-5">
+  <div class="col-md-4">
+    <div class="stats-card" style="border-left: 4px solid #667eea;">
+      <div class="stats-icon" style="background: rgba(102, 126, 234, 0.1);">
+        <i class="fas fa-calendar-alt fa-2x" style="color: #667eea;"></i>
+      </div>
+      <div>
+        <h3><%= totalEvents %></h3>
+        <br><br>
+        <p class="text-muted mb-0">Total Events</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="stats-card" style="border-left: 4px solid #11998e;">
+      <div class="stats-icon" style="background: rgba(17, 153, 142, 0.1);">
+        <i class="fas fa-user-graduate fa-2x" style="color: #11998e;"></i>
+      </div>
+      <div>
+        <h3><%= totalStudents %></h3>
+        <br><br>
+        <p class="text-muted mb-0">Total Students</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="stats-card" style="border-left: 4px solid #f5576c;">
+      <div class="stats-icon" style="background: rgba(245, 87, 108, 0.1);">
+        <i class="fas fa-clipboard-check fa-2x" style="color: #f5576c;"></i>
+      </div>
+      <div>
+        <h3><%= totalRegistrations %></h3>
+        <br><br>
+        <p class="text-muted mb-0">Total Registrations</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category Chart -->
+<% if (categoryData.length > 0) { %>
+  <div class="row mb-5">
+    <div class="col-lg-6 mx-auto">
+      <div class="chart-container">
+        <h4 class="mb-4 text-center">📊 Registrations by Category</h4>
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+<!-- Recent Events Table -->
+<div class="table-responsive">
+  <h4 class="mb-4">📋 Recent Events & Registrations</h4>
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Event Name</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Venue</th>
+        <th>Registrations</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% events.forEach(event => { %>
+        <tr>
+          <td><strong><%= event.name %></strong></td>
+          <td>
+            <span class="category-badge category-<%= event.category.toLowerCase() %>">
+              <%= event.category %>
+            </span>
+          </td>
+          <td><%= event.date.toDateString() %></td>
+          <td><%= event.venue %></td>
+          <td>
+            <span class="badge bg-primary">
+              <%= event.registrationCount %> Students
+            </span>
+          </td>
+          <td>
+            <a href="/dashboard/admin/event/<%= event._id %>/registrations" class="btn btn-sm btn-info">
+              <i class="fas fa-users me-1"></i>View
+            </a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<style>
+.stats-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.stats-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-card h3 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.chart-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+</style>
+
+<% if (categoryData.length > 0) { %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  // Category-wise registration chart
+  const ctx = document.getElementById('categoryChart').getContext('2d');
+  
+  const categoryData = <%- JSON.stringify(categoryData) %>;
+  
+  const labels = categoryData.map(item => item._id);
+  const data = categoryData.map(item => item.count);
+  
+  const backgroundColors = {
+    'Technical': 'rgba(102, 126, 234, 0.8)',
+    'Cultural': 'rgba(245, 87, 108, 0.8)',
+    'Sports': 'rgba(0, 242, 254, 0.8)'
+  };
+  
+  const borderColors = {
+    'Technical': 'rgba(102, 126, 234, 1)',
+    'Cultural': 'rgba(245, 87, 108, 1)',
+    'Sports': 'rgba(0, 242, 254, 1)'
+  };
+  
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Registrations',
+        data: data,
+        backgroundColor: labels.map(label => backgroundColors[label] || 'rgba(150, 150, 150, 0.8)'),
+        borderColor: labels.map(label => borderColors[label] || 'rgba(150, 150, 150, 1)'),
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 20,
+            font: {
+              size: 14,
+              family: 'Inter'
+            }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          padding: 12,
+          titleFont: {
+            size: 14,
+            family: 'Inter'
+          },
+          bodyFont: {
+            size: 13,
+            family: 'Inter'
+          }
+        }
+      }
+    }
+  });
+</script>
+<% } %>
