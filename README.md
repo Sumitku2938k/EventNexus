@@ -37,7 +37,17 @@ A comprehensive college event management system built with Node.js, Express, Mon
 - MongoDB (v4.4 or higher)
 - npm or yarn
 
-### Step 1: Clone and Install Dependencies
+### ⚙️ Installation and Setup (Local Machine)
+
+Follow these steps to run the project locally 👇
+
+#### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/your-username/EventNexus.git
+cd EventNexus
+```
+
+### 2️⃣ Install Dependencies
 ```bash
 # Install all dependencies
 npm install
@@ -51,6 +61,7 @@ mongod
 
 ### Step 3: Initialize Database with Sample Data
 ```bash
+
 # This will populate events
 node init/index.js
 
@@ -65,6 +76,9 @@ npm run dev
 
 # For production
 npm start
+=======
+nodemon app.js
+>>>>>>> cc59982027b3871ffe6e5668ca5fe1bc72e40a7a
 ```
 
 ### Step 5: Access the Application
@@ -135,174 +149,6 @@ College Event Manager
 │   └── wrapAsync.js          # Async error wrapper
 └── schema.js                  # Joi validation schema
 ```
-
-## 🔑 Key Features Explained
-
-### 1. Authentication System
-- **Password Security:** Passwords are hashed using bcrypt before storage
-- **Session Management:** Uses express-session for maintaining user sessions
-- **Middleware Protection:** Routes are protected with `isLoggedIn`, `isAdmin`, `isStudent`
-
-### 2. File Upload System
-- **Multer Integration:** Handles event poster uploads
-- **File Validation:** Only accepts image files (JPG, PNG, GIF, WEBP)
-- **Size Limit:** Maximum 5MB per image
-- **Storage:** Images stored in `public/uploads/` directory
-
-### 3. Registration System
-- **Duplicate Prevention:** Compound index prevents multiple registrations
-- **Real-time Status:** Shows if student is already registered
-- **Admin Visibility:** Admins can view all registrations per event
-
-### 4. Role-Based Access Control
-- **Students Can:**
-  - Browse all events
-  - Register/unregister for events
-  - View their registration dashboard
-  
-- **Admins Can:**
-  - All student capabilities
-  - Create, edit, delete events
-  - Upload event posters
-  - View analytics dashboard
-  - See all registrations per event
-
-### 5. Dashboard Analytics
-- **Admin Dashboard includes:**
-  - Total events count
-  - Total students count
-  - Total registrations count
-  - Category-wise registration chart (Chart.js)
-  - Recent events with registration counts
-  - Quick links to manage registrations
-
-## 🛠️ Technologies Used
-
-### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **MongoDB** - Database
-- **Mongoose** - ODM for MongoDB
-
-### Authentication & Security
-- **bcrypt** - Password hashing
-- **express-session** - Session management
-
-### File Handling
-- **Multer** - File upload middleware
-
-### Frontend
-- **EJS** - Templating engine
-- **Bootstrap 5** - UI framework
-- **Font Awesome** - Icons
-- **Chart.js** - Data visualization
-
-### Validation
-- **Joi** - Schema validation
-
-## 📝 API Routes
-
-### Authentication Routes (`/auth`)
-```
-GET  /auth/signup       - Signup page
-POST /auth/signup       - Create new user
-GET  /auth/login        - Login page
-POST /auth/login        - Authenticate user
-GET  /auth/logout       - Logout user
-```
-
-### Event Routes (`/events`)
-```
-GET    /events          - List all events (Public)
-GET    /events/new      - Create event form (Admin only)
-POST   /events          - Create new event (Admin only)
-GET    /events/:id      - Event details
-GET    /events/:id/edit - Edit event form (Admin only)
-PUT    /events/:id      - Update event (Admin only)
-DELETE /events/:id      - Delete event (Admin only)
-```
-
-### Registration Routes (`/register`)
-```
-POST   /register/:eventId  - Register for event (Student only)
-DELETE /register/:eventId  - Unregister from event (Student only)
-```
-
-### Dashboard Routes (`/dashboard`)
-```
-GET /dashboard/student                        - Student dashboard
-GET /dashboard/admin                          - Admin dashboard
-GET /dashboard/admin/event/:eventId/registrations - Event registrations
-```
-
-## 🔒 Security Best Practices
-
-1. **Change Default Credentials:** Always change default admin/student passwords
-2. **Session Secret:** Update the session secret in `app.js` for production
-3. **Environment Variables:** Use `.env` file for sensitive data in production
-4. **HTTPS:** Always use HTTPS in production
-5. **Input Validation:** All inputs are validated using Joi schema
-6. **File Upload Security:** File type and size restrictions are enforced
-
-## 🎨 Customization
-
-### Adding New Event Categories
-Edit `models/events.js`:
-```javascript
-category: { 
-  type: String, 
-  enum: ["Technical", "Cultural", "Sports", "Workshop", "Seminar"], 
-  required: true 
-}
-```
-
-### Changing Session Duration
-Edit `app.js`:
-```javascript
-cookie: {
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 30, // 30 days
-    maxAge: 1000 * 60 * 60 * 24 * 30
-}
-```
-
-### Modifying Upload Size Limit
-Edit `middleware/upload.js`:
-```javascript
-limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-```
-
-## 🐛 Common Issues & Solutions
-
-### Issue: MongoDB Connection Error
-**Solution:** Ensure MongoDB is running on port 27017
-```bash
-mongod --port 27017
-```
-
-### Issue: Session Not Persisting
-**Solution:** Check that you have session middleware before routes in `app.js`
-
-### Issue: File Upload Not Working
-**Solution:** 
-1. Ensure `public/uploads/` directory exists
-2. Check form has `enctype="multipart/form-data"`
-3. Verify file size is under limit
-
-### Issue: Cannot Access Admin Routes
-**Solution:** Login with admin credentials (admin@college.edu)
-
-## 📊 Future Enhancements
-
-- [ ] Email notifications for event registrations
-- [ ] Payment gateway integration for registration fees
-- [ ] QR code generation for event tickets
-- [ ] Calendar view for events
-- [ ] Event capacity limits
-- [ ] Waiting list functionality
-- [ ] Export registrations to CSV/PDF
-- [ ] Email verification for signup
-- [ ] Password reset functionality
-- [ ] Social media sharing for events
 
 ## 🤝 Contributing
 
