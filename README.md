@@ -76,9 +76,6 @@ npm run dev
 
 # For production
 npm start
-=======
-nodemon app.js
->>>>>>> cc59982027b3871ffe6e5668ca5fe1bc72e40a7a
 ```
 
 ### Step 5: Access the Application
