@@ -2,6 +2,25 @@
 
 <div class="row">
   <div class="col-lg-8 mx-auto">
+    <% if (typeof success !== 'undefined' && success === 'registered') { %>
+      <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+        <i class="fas fa-check-circle me-2"></i><strong>Success!</strong> You have successfully registered for this event.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } else if (typeof success !== 'undefined' && success === 'unregistered') { %>
+      <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
+        <i class="fas fa-info-circle me-2"></i>You have unregistered from this event.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+
+    <% if (typeof error !== 'undefined' && error === 'already_registered') { %>
+      <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>You are already registered for this event.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+
     <div class="event-detail-card">
       <span class="category-badge category-<%= event.category.toLowerCase() %>">
         <%= event.category %>
@@ -20,7 +39,7 @@
         
         <div class="info-item">
           <strong><i class="fas fa-calendar me-2"></i> Date:</strong>
-          <span><%= event.date.toDateString() %></span>
+          <span><%= (event.date && !isNaN(new Date(event.date).getTime())) ? new Date(event.date).toDateString() : 'Date TBD' %></span>
         </div>
         
         <div class="info-item">
@@ -35,7 +54,7 @@
         
         <div class="info-item">
           <strong><i class="fas fa-clock me-2"></i> Posted:</strong>
-          <span><%= event.createdAt.toDateString() %></span>
+          <span><%= (event.createdAt && !isNaN(new Date(event.createdAt).getTime())) ? new Date(event.createdAt).toDateString() : 'N/A' %></span>
         </div>
       </div>
       
@@ -85,16 +104,11 @@
   </div>
 </div>
 
-<!-- Success/Error Messages -->
-<% if (typeof success !== 'undefined' && success) { %>
+<!-- URL cleanup after alert display -->
+<% if ((typeof success !== 'undefined' && success) || (typeof error !== 'undefined' && error)) { %>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('success') === 'registered') {
-        alert('✅ Successfully registered for the event!');
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } else if (urlParams.get('success') === 'unregistered') {
-        alert('✅ Successfully unregistered from the event.');
+      if (window.location.search) {
         window.history.replaceState({}, document.title, window.location.pathname);
       }
     });

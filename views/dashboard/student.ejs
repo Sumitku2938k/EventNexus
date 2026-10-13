@@ -31,7 +31,7 @@
               <div class="mb-3">
                 <p class="mb-2">
                   <i class="fas fa-calendar text-primary me-2"></i>
-                  <strong>Date:</strong> <%= reg.eventId.date.toDateString() %>
+                  <strong>Date:</strong> <%= (reg.eventId.date && !isNaN(new Date(reg.eventId.date).getTime())) ? new Date(reg.eventId.date).toDateString() : 'Date TBD' %>
                 </p>
                 <p class="mb-2">
                   <i class="fas fa-map-marker-alt text-danger me-2"></i>
@@ -39,7 +39,7 @@
                 </p>
                 <p class="mb-2">
                   <i class="fas fa-clock text-success me-2"></i>
-                  <strong>Registered:</strong> <%= reg.appliedAt.toDateString() %>
+                  <strong>Registered:</strong> <%= (reg.appliedAt && !isNaN(new Date(reg.appliedAt).getTime())) ? new Date(reg.appliedAt).toDateString() : 'N/A' %>
                 </p>
               </div>
               

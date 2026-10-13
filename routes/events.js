@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Event = require('../models/events');
 const Registration = require('../models/registration');
 const wrapAsync = require('../utils/wrapAsync');
@@ -8,6 +9,14 @@ const { isLoggedIn, isAdmin } = require('../middleware/auth');
 const upload = require('../middleware/upload');
 const eventSchema = require('../schema');
 const { uploadToCloudinary, deleteFromCloudinary, isValidImageBuffer } = require('../utils/cloudinary');
+
+// Parameter Validation Middleware
+const validateEventId = (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return next(new ExpressError(404, 'Event not found'));
+    }
+    next();
+};
 
 // Validation Middleware
 const validateEvent = (req, res, next) => {
@@ -30,7 +39,7 @@ router.get('/new', isAdmin, wrapAsync(async (req, res) => {
 }));
 
 // Show Route - Event Details (Public, but actions restricted)
-router.get('/:id', wrapAsync(async (req, res) => {
+router.get('/:id', validateEventId, wrapAsync(async (req, res) => {
     const event = await Event.findById(req.params.id);
     if (!event) {
         throw new ExpressError(404, 'Event not found');
@@ -46,7 +55,10 @@ router.get('/:id', wrapAsync(async (req, res) => {
         isRegistered = !!registration;
     }
     
-    res.render("events/show.ejs", { event, isRegistered });
+    const success = req.query.success || null;
+    const error = req.query.error || null;
+
+    res.render("events/show.ejs", { event, isRegistered, success, error });
 }));
 
 // Create Route - With Image Upload (Admin Only)
@@ -81,7 +93,7 @@ router.post('/', isAdmin, upload.single('poster'), validateEvent, wrapAsync(asyn
 }));
 
 // Edit Route - Edit Form (Admin Only)
-router.get("/:id/edit", isAdmin, wrapAsync(async (req, res) => {
+router.get("/:id/edit", isAdmin, validateEventId, wrapAsync(async (req, res) => {
     const event = await Event.findById(req.params.id);
     if (!event) {
         throw new ExpressError(404, 'Event not found');
@@ -90,7 +102,7 @@ router.get("/:id/edit", isAdmin, wrapAsync(async (req, res) => {
 }));
 
 // Update Route - With Optional Image Upload (Admin Only)
-router.put("/:id", isAdmin, upload.single('poster'), validateEvent, wrapAsync(async (req, res) => {
+router.put("/:id", isAdmin, validateEventId, upload.single('poster'), validateEvent, wrapAsync(async (req, res) => {
     const { id } = req.params;
     const event = await Event.findById(id);
     
@@ -137,7 +149,7 @@ router.put("/:id", isAdmin, upload.single('poster'), validateEvent, wrapAsync(as
 }));
 
 // Delete Route (Admin Only)
-router.delete("/:id", isAdmin, wrapAsync(async (req, res) => {
+router.delete("/:id", isAdmin, validateEventId, wrapAsync(async (req, res) => {
     const { id } = req.params;
     const event = await Event.findById(id);
 

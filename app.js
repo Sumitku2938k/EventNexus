@@ -107,7 +107,10 @@ app.use((req, res, next) => {
 // Error Handling Middleware
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = 'Something went wrong' } = err;
-    if (err.name === 'MulterError') {
+    if (err.name === 'CastError' && err.kind === 'ObjectId') {
+        statusCode = 404;
+        message = 'Requested resource not found';
+    } else if (err.name === 'MulterError') {
         statusCode = 400;
         if (err.code === 'LIMIT_FILE_SIZE') {
             message = 'Uploaded file is too large. Maximum allowed size is 5MB.';

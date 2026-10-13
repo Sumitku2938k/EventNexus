@@ -1,13 +1,22 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Registration = require('../models/registration');
 const Event = require('../models/events');
 const wrapAsync = require('../utils/wrapAsync');
 const ExpressError = require('../utils/ExpressError');
 const { isStudent } = require('../middleware/auth');
 
+// Parameter Validation Middleware
+const validateEventId = (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.eventId)) {
+        return next(new ExpressError(404, 'Event not found'));
+    }
+    next();
+};
+
 // POST - Register for an event (Student Only)
-router.post('/:eventId', isStudent, wrapAsync(async (req, res) => {
+router.post('/:eventId', isStudent, validateEventId, wrapAsync(async (req, res) => {
     const { eventId } = req.params;
     const studentId = req.session.userId;
     
@@ -31,7 +40,7 @@ router.post('/:eventId', isStudent, wrapAsync(async (req, res) => {
 }));
 
 // DELETE - Unregister from an event (Student Only)
-router.delete('/:eventId', isStudent, wrapAsync(async (req, res) => {
+router.delete('/:eventId', isStudent, validateEventId, wrapAsync(async (req, res) => {
     const { eventId } = req.params;
     const studentId = req.session.userId;
     

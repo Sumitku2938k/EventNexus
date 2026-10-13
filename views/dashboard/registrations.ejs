@@ -46,15 +46,15 @@
             <td><%= index + 1 %></td>
             <td>
               <i class="fas fa-user-graduate me-2 text-primary"></i>
-              <strong><%= reg.studentId.name %></strong>
+              <strong><%= (reg.studentId && reg.studentId.name) ? reg.studentId.name : 'Unknown / Deleted User' %></strong>
             </td>
             <td>
               <i class="fas fa-envelope me-2 text-muted"></i>
-              <%= reg.studentId.email %>
+              <%= (reg.studentId && reg.studentId.email) ? reg.studentId.email : 'N/A' %>
             </td>
             <td>
               <i class="fas fa-clock me-2 text-success"></i>
-              <%= reg.appliedAt.toLocaleString() %>
+              <%= (reg.appliedAt && !isNaN(new Date(reg.appliedAt).getTime())) ? new Date(reg.appliedAt).toLocaleString() : 'N/A' %>
             </td>
           </tr>
         <% }) %>

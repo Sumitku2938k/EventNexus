@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Event = require('../models/events');
 const Registration = require('../models/registration');
 const User = require('../models/user');
 const wrapAsync = require('../utils/wrapAsync');
+const ExpressError = require('../utils/ExpressError');
 const { isLoggedIn, isAdmin, isStudent } = require('../middleware/auth');
 
 // Student Dashboard - Show registered events
@@ -70,6 +72,10 @@ router.get('/admin', isAdmin, wrapAsync(async (req, res) => {
 router.get('/admin/event/:eventId/registrations', isAdmin, wrapAsync(async (req, res) => {
     const { eventId } = req.params;
     
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+        throw new ExpressError(404, 'Event not found');
+    }
+
     const event = await Event.findById(eventId);
     if (!event) {
         throw new ExpressError(404, 'Event not found');

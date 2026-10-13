@@ -31,7 +31,16 @@
           <label for="date" class="form-label">
             <i class="fas fa-calendar me-2"></i>Date
           </label>
-          <input type="date" id="date" name="event[date]" class="form-control" value="<%= event.date.toISOString().split('T')[0] %>" required>
+          <%
+            let formattedDate = '';
+            if (event.date) {
+              const d = new Date(event.date);
+              if (!isNaN(d.getTime())) {
+                formattedDate = d.toISOString().split('T')[0];
+              }
+            }
+          %>
+          <input type="date" id="date" name="event[date]" class="form-control" value="<%= formattedDate %>" required>
           <div class="invalid-feedback">Please provide a Date.</div>
         </div>
 

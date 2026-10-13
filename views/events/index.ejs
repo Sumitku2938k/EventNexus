@@ -30,7 +30,7 @@
             <div class="mb-3">
               <p class="mb-2">
                 <i class="fas fa-calendar text-primary me-2"></i>
-                <strong>Date:</strong> <%= event.date.toDateString() %>
+                <strong>Date:</strong> <%= (event.date && !isNaN(new Date(event.date).getTime())) ? new Date(event.date).toDateString() : 'Date TBD' %>
               </p>
               <p class="mb-2">
                 <i class="fas fa-map-marker-alt text-danger me-2"></i>

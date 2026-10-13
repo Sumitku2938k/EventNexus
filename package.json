@@ -8,6 +8,9 @@
     "dev": "nodemon app.js",
     "init-db": "node init/index.js"
   },
+  "engines": {
+    "node": ">=20.x"
+  },
   "keywords": [
     "express",
     "mongodb",
