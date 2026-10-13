@@ -1,12 +1,16 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 const express = require('express');
 const app = express();
-const port = 3000;
-const mongoose = require('mongoose');
+const port = process.env.PORT || 3000;
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require('express-session');
 const ExpressError = require('./utils/ExpressError');
+const connectDB = require('./utils/db');
 
 // Import Routes
 const authRoutes = require('./routes/auth');
@@ -17,19 +21,10 @@ const dashboardRoutes = require('./routes/dashboard');
 // Import Middleware
 const { attachUserToViews } = require('./middleware/auth');
 
-const MONGO_URI = 'mongodb://127.0.0.1:27017/collegeEvent';
-
-// MongoDB Connection
-main()
-    .then(() => {
-        console.log('MongoDB connected');
-    }).catch((err) => {
-        console.error('MongoDB connection error:', err);
-    });
-
-async function main() {
-    await mongoose.connect(MONGO_URI);
-}
+// Initial MongoDB Connection
+connectDB().catch((err) => {
+    console.error('Initial MongoDB connection error:', err.message);
+});
 
 // View Engine Setup
 app.set("view engine", "ejs");
@@ -56,6 +51,16 @@ app.use(session({
 
 // Attach user info to all views
 app.use(attachUserToViews);
+
+// Database connection check middleware
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (err) {
+        next(new ExpressError(500, 'Database connection error: Unable to connect to database'));
+    }
+});
 
 // Home Route
 app.get('/', (req, res) => {
