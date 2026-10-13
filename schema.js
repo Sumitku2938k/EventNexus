@@ -8,7 +8,8 @@ const eventSchema = Joi.object({
         registrationFee: Joi.number().required().min(0),
         venue: Joi.string().required(),
         category: Joi.string().valid("Technical", "Cultural", "Sports").required(),
-        poster: Joi.string().uri().optional().allow('', null),
+        poster: Joi.string().optional().allow('', null),
+        posterPublicId: Joi.string().optional().allow('', null),
     }),
 });
 

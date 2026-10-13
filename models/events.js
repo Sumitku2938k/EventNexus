@@ -13,6 +13,10 @@ const eventSchema = new Schema({
         default: "https://d12m9erqbesehq.cloudfront.net/wp-content/uploads/sites/2/2023/12/10195608/Blog-Banner-Fun-events-for-college-fest.jpg",
         set: (v) => v === "" ? "https://d12m9erqbesehq.cloudfront.net/wp-content/uploads/sites/2/2023/12/10195608/Blog-Banner-Fun-events-for-college-fest.jpg" : v,
     },   // path or URL of uploaded image
+    posterPublicId: {
+        type: String,
+        default: null
+    }
 }, { timestamps: true });
 
 const Event = mongoose.model('Event', eventSchema);
