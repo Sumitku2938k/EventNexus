@@ -17,6 +17,7 @@
       <% } %>
 
       <form method="POST" action="/auth/signup" class="needs-validation" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <div class="mb-3">
           <label for="name" class="form-label">
             <i class="fas fa-user me-2"></i>Full Name
@@ -33,22 +34,12 @@
           <div class="invalid-feedback">Please provide a valid email.</div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
           <label for="password" class="form-label">
             <i class="fas fa-lock me-2"></i>Password
           </label>
           <input type="password" id="password" name="password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
           <div class="invalid-feedback">Password must be at least 6 characters.</div>
-        </div>
-
-        <div class="mb-4">
-          <label for="role" class="form-label">
-            <i class="fas fa-user-tag me-2"></i>I am a
-          </label>
-          <select id="role" name="role" class="form-select" required>
-            <option value="student" selected>🎓 Student</option>
-            <option value="admin">👨‍💼 Admin</option>
-          </select>
         </div>
 
         <button type="submit" class="btn btn-primary w-100 mb-3">

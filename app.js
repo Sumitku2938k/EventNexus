@@ -9,6 +9,7 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require('express-session');
+const { MongoStore } = require('connect-mongo');
 const ExpressError = require('./utils/ExpressError');
 const connectDB = require('./utils/db');
 
@@ -20,6 +21,10 @@ const dashboardRoutes = require('./routes/dashboard');
 
 // Import Middleware
 const { attachUserToViews } = require('./middleware/auth');
+const csrfProtection = require('./middleware/csrf');
+
+// Proxy Trust (Required for Vercel/reverse proxies)
+app.set('trust proxy', 1);
 
 // Initial MongoDB Connection
 connectDB().catch((err) => {
@@ -37,20 +42,41 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Session Configuration
+// Session Configuration with MongoStore
+const isProduction = process.env.NODE_ENV === 'production';
+
+const sessionStore = MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: 'sessions',
+    crypto: {
+        secret: process.env.SESSION_SECRET || 'eventnexus-session-crypto-key'
+    },
+    touchAfter: 24 * 3600 // Lazy session update once every 24h unless modified
+});
+
+sessionStore.on('error', (err) => {
+    console.error('Session store error:', err.message);
+});
+
 app.use(session({
-    secret: 'your-secret-key-change-in-production', // Change this in production!
+    store: sessionStore,
+    name: 'connect.sid',
+    secret: process.env.SESSION_SECRET || 'your-secret-key-change-in-production',
     resave: false,
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 days
-        maxAge: 1000 * 60 * 60 * 24 * 7
+        secure: isProduction,
+        sameSite: 'lax',
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     }
 }));
 
 // Attach user info to all views
 app.use(attachUserToViews);
+
+// CSRF Protection Middleware
+app.use(csrfProtection);
 
 // Database connection check middleware
 app.use(async (req, res, next) => {
@@ -92,6 +118,10 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render("error.ejs", { message });
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Server is running on http://localhost:${port}`);
+    });
+}
+
+module.exports = app;
