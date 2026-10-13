@@ -1,6 +1,8 @@
 const multer = require('multer');
 const path = require('path');
 
+const ExpressError = require('../utils/ExpressError');
+
 // Configure memory storage for serverless compatibility (no local disk writes)
 const storage = multer.memoryStorage();
 
@@ -13,7 +15,7 @@ const fileFilter = (req, file, cb) => {
     if (extname && isImageMime) {
         cb(null, true);
     } else {
-        cb(new Error('Only image files are allowed (jpeg, jpg, png, gif, webp)'));
+        cb(new ExpressError(400, 'Only image files are allowed (jpeg, jpg, png, gif, webp)'));
     }
 };
 
