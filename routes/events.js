@@ -20,7 +20,17 @@ const validateEventId = (req, res, next) => {
 
 // Validation Middleware
 const validateEvent = (req, res, next) => {
-    const { error } = eventSchema.validate(req.body);
+    // If CSRF token is provided in the body, verify it matches the session token
+    if (req.body && req.body._csrf && req.session && req.body._csrf !== req.session.csrfToken) {
+        return next(new ExpressError(403, 'CSRF validation failed: Invalid token. Please reload the page.'));
+    }
+
+    // Create a copied validation payload and remove CSRF / method metadata before Joi validation
+    const payload = req.body ? { ...req.body } : {};
+    delete payload._csrf;
+    delete payload._method;
+
+    const { error } = eventSchema.validate(payload);
     if (error) {
         throw new ExpressError(400, error.details[0].message);
     }

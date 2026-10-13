@@ -10,7 +10,7 @@ const eventSchema = Joi.object({
         category: Joi.string().valid("Technical", "Cultural", "Sports").required(),
         poster: Joi.string().optional().allow('', null),
         posterPublicId: Joi.string().optional().allow('', null),
-    }),
+    }).required(),
 });
 
 module.exports = eventSchema;
