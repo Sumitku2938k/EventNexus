@@ -12,7 +12,7 @@ A full-stack college event management platform built for universities, student c
 
 ## 🌐 Live Deployment
 
-- **Production URL:** [https://eventnexus.vercel.app](https://eventnexus.vercel.app) *(or your deployed Vercel domain)*
+- **Production URL:** [https://eventnexus.vercel.app](https://event-nexus-sigma.vercel.app/) *(or your deployed Vercel domain)*
 - **Status:** Production Ready
 
 ---
